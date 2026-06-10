@@ -8,16 +8,23 @@ application {
     mainClassName = "com.skcraft.launcher.FancyLauncher"
 }
 
-repositories {
-    maven {
-        name = 'bbkr.space maven'
-        url = 'https://server.bbkr.space/artifactory/libs-snapshot'
+// Radiance ships Java 9 bytecode, so this module needs a JDK 9+ toolchain,
+// overriding the Java 8 toolchain that the root build applies to every module.
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
+}
+
+// The Lombok bundled with the root freefair plugin (1.18.20) can't access JDK
+// compiler internals on Java 16+. Pin a version that supports the JDK 21 toolchain.
+lombok {
+    version = "1.18.34"
 }
 
 dependencies {
     implementation project(path: ':launcher')
-    implementation 'io.github.cottonmc.insubstantial:substance:7.3.1-SNAPSHOT'
+    implementation 'org.pushing-pixels:radiance-substance:4.5.0'
 }
 
 shadowJar {
