@@ -16,6 +16,12 @@ java {
     }
 }
 
+// Target the Java 17 floor so a single artifact runs on both Java 17 and 21.
+// Without this, the JDK 21 toolchain emits Java 21 bytecode that won't load on 17.
+tasks.withType(JavaCompile).configureEach {
+    options.release.set(17)
+}
+
 // The Lombok bundled with the root freefair plugin (1.18.20) can't access JDK
 // compiler internals on Java 16+. Pin a version that supports the JDK 21 toolchain.
 lombok {
